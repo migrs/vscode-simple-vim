@@ -112,6 +112,27 @@ export const actions: Action[] = [
         }
     }),
 
+    parseKeysExact(['s'], [Mode.Normal], (vimState, editor) => {
+        editor.edit(editBuilder => {
+            editor.selections.forEach(selection => {
+                const position = selection.active;
+                const lineLength = editor.document.lineAt(position.line).text.length;
+                
+                if (lineLength > 0 && position.character < lineLength) {
+                    const range = new vscode.Range(
+                        position,
+                        position.with({ character: position.character + 1 })
+                    );
+                    editBuilder.delete(range);
+                }
+            });
+        });
+        
+        enterInsertMode(vimState);
+        setModeCursorStyle(vimState.mode, editor);
+        removeTypeSubscription(vimState);
+    }),
+
     parseKeysExact(['u'], [Mode.Normal, Mode.Visual, Mode.VisualLine], (vimState, editor) => {
         vscode.commands.executeCommand('undo');
     }),
