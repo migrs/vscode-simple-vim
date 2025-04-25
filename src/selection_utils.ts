@@ -5,7 +5,12 @@ import * as positionUtils from './position_utils';
 export function vscodeToVimVisualSelection(
     document: vscode.TextDocument,
     vscodeSelection: vscode.Selection,
+    newPosition?: vscode.Position,
 ): vscode.Selection {
+    if (newPosition) {
+        return new vscode.Selection(vscodeSelection.anchor, newPosition);
+    }
+
     if (vscodeSelection.active.isBefore(vscodeSelection.anchor)) {
         return new vscode.Selection(
             positionUtils.left(vscodeSelection.anchor),
@@ -39,7 +44,12 @@ export function vimToVscodeVisualSelection(
 export function vscodeToVimVisualLineSelection(
     document: vscode.TextDocument,
     vscodeSelection: vscode.Selection,
+    newPosition?: vscode.Position,
 ): vscode.Selection {
+    if (newPosition) {
+        return new vscode.Selection(vscodeSelection.anchor, newPosition);
+    }
+
     return new vscode.Selection(
         vscodeSelection.anchor.with({ character: 0 }),
         vscodeSelection.active.with({ character: 0 }),

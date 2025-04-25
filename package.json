@@ -10,7 +10,7 @@
         "url": "https://github.com/jpotterm/vscode-simple-vim.git"
     },
     "engines": {
-        "vscode": "^1.22.2"
+        "vscode": "^1.85.0"
     },
     "categories": [
         "Other"
@@ -65,16 +65,19 @@
         }
     },
     "scripts": {
-        "vscode:prepublish": "echo \"Skipping compile\"",
+        "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "lint": "tslint -c tslint.json 'src/**/*.ts' --exclude 'src/test/*.ts'"
+        "postinstall": "node ./node_modules/@vscode/vsce/vsce package",
+        "lint": "eslint --ext .ts,.tsx src/"
     },
     "devDependencies": {
-        "@types/node": "^10.5.1",
-        "tslint": "^5.10.0",
-        "typescript": "^2.9.2",
-        "vscode": "^1.1.18"
+        "@types/node": "^20.11.0",
+        "@types/vscode": "^1.85.0",
+        "@typescript-eslint/eslint-plugin": "^7.0.0",
+        "@typescript-eslint/parser": "^7.0.0",
+        "@vscode/vsce": "^2.24.0",
+        "eslint": "^8.56.0",
+        "typescript": "^5.3.3"
     }
 }

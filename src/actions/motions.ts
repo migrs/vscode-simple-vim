@@ -8,8 +8,6 @@ import {
 } from '../parse_keys';
 import {
     vscodeToVimVisualSelection,
-    vimToVscodeVisualLineSelection,
-    vimToVscodeVisualSelection,
     vscodeToVimVisualLineSelection,
 } from '../selection_utils';
 import * as positionUtils from '../position_utils';
@@ -249,37 +247,37 @@ function execMotion(vimState: VimState, editor: vscode.TextEditor, motion: (args
                 selectionIndex: i,
                 vimState: vimState,
             });
+
             return new vscode.Selection(newPosition, newPosition);
         } else if (vimState.mode === Mode.Visual) {
-            const vimSelection = vscodeToVimVisualSelection(document, selection);
-            const motionPosition = motion({
+            const newPosition = motion({
                 document: document,
-                position: vimSelection.active,
+                position: selection.active,
                 selectionIndex: i,
                 vimState: vimState,
             });
 
-            return vimToVscodeVisualSelection(document, new vscode.Selection(vimSelection.anchor, motionPosition));
+            return vscodeToVimVisualSelection(editor.document, selection, newPosition);
         } else if (vimState.mode === Mode.VisualLine) {
-            const vimSelection = vscodeToVimVisualLineSelection(document, selection);
-            const motionPosition = motion({
+            const newPosition = motion({
                 document: document,
-                position: vimSelection.active,
+                position: selection.active,
                 selectionIndex: i,
                 vimState: vimState,
             });
 
-            return vimToVscodeVisualLineSelection(document, new vscode.Selection(vimSelection.anchor, motionPosition));
-        } else {
-            return selection;
+            return vscodeToVimVisualLineSelection(editor.document, selection, newPosition);
         }
+
+        return selection;
     });
 
     editor.selections = newSelections;
 
+    // Scroll cursor into view
     editor.revealRange(
         new vscode.Range(newSelections[0].active, newSelections[0].active),
-        vscode.TextEditorRevealType.InCenterIfOutsideViewport,
+        vscode.TextEditorRevealType.Default,
     );
 }
 
