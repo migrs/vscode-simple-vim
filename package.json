@@ -16,7 +16,8 @@
         "Other"
     ],
     "activationEvents": [
-        "*"
+        "onStartupFinished",
+        "onLanguage:*"
     ],
     "main": "./out/extension",
     "contributes": {

@@ -266,6 +266,32 @@ export const actions: Action[] = [
 
     parseKeysExact(['<', '<'], [Mode.Normal, Mode.Visual, Mode.VisualLine], indentLeft),
     parseKeysExact(['>', '>'], [Mode.Normal, Mode.Visual, Mode.VisualLine], indentRight),
+
+    parseKeysExact(['s'], [Mode.Visual, Mode.VisualLine], (vimState, editor) => {
+        // First yank the selected text
+        vimState.registers = {
+            contentsList: editor.selections.map(selection => {
+                return editor.document.getText(selection);
+            }),
+            linewise: vimState.mode === Mode.VisualLine,
+        };
+
+        // Then delete the selected text
+        editor.edit(editBuilder => {
+            editor.selections.forEach(selection => {
+                editBuilder.delete(selection);
+            });
+        }).then(() => {
+            // Move cursor to start of deleted text
+            editor.selections = editor.selections.map(selection => {
+                return new vscode.Selection(selection.start, selection.start);
+            });
+
+            enterInsertMode(vimState);
+            setModeCursorStyle(vimState.mode, editor);
+            removeTypeSubscription(vimState);
+        });
+    }),
 ];
 
 function deleteLine(vimState: VimState, editor: vscode.TextEditor): void {
