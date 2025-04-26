@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import { Mode } from '../modes_types';
 import { Action } from '../action_types';
 import { parseKeysExact } from '../parse_keys';
-import { enterInsertMode, enterVisualMode, enterVisualLineMode, setModeCursorStyle, enterNormalMode } from '../modes';
+import { enterInsertMode, enterVisualMode, enterVisualLineMode, setModeCursorStyle } from '../modes';
 import * as positionUtils from '../position_utils';
 import { removeTypeSubscription } from '../type_subscription';
 import { VimState } from '../vim_state_types';
@@ -231,33 +231,8 @@ export const actions: Action[] = [
         setModeCursorStyle(vimState.mode, editor);
     }),
 
-    parseKeysExact(['x'], [Mode.Normal, Mode.Visual, Mode.VisualLine], (vimState, editor) => {
-        if (vimState.mode === Mode.Normal) {
-            vscode.commands.executeCommand('deleteRight');
-        } else {
-            // First yank the selected text
-            vimState.registers = {
-                contentsList: editor.selections.map(selection => {
-                    return editor.document.getText(selection);
-                }),
-                linewise: vimState.mode === Mode.VisualLine,
-            };
-
-            // Then delete the selected text
-            editor.edit(editBuilder => {
-                editor.selections.forEach(selection => {
-                    editBuilder.delete(selection);
-                });
-            }).then(() => {
-                // Move cursor to start of deleted text
-                editor.selections = editor.selections.map(selection => {
-                    return new vscode.Selection(selection.start, selection.start);
-                });
-
-                enterNormalMode(vimState);
-                setModeCursorStyle(vimState.mode, editor);
-            });
-        }
+    parseKeysExact(['x'], [Mode.Normal], (vimState, editor) => {
+        vscode.commands.executeCommand('deleteRight');
     }),
 
     parseKeysExact(['z', 't'], [Mode.Normal], (vimState, editor) => {
