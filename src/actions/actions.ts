@@ -269,6 +269,10 @@ export const actions: Action[] = [
 ];
 
 function deleteLine(vimState: VimState, editor: vscode.TextEditor): void {
+    // Yank the line first
+    yankLine(vimState, editor);
+
+    // Then delete the line
     vscode.commands.executeCommand('editor.action.deleteLines').then(() => {
         editor.selections = editor.selections.map(selection => {
             const character = editor.document.lineAt(selection.active.line).firstNonWhitespaceCharacterIndex;
