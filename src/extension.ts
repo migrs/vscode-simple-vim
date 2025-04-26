@@ -7,6 +7,7 @@ import { typeHandler } from './type_handler';
 import { addTypeSubscription, removeTypeSubscription } from './type_subscription';
 import { VimState } from './vim_state_types';
 import { escapeHandler } from './escape_handler';
+import { indentLeft, indentRight } from './actions/indent_actions';
 
 const globalVimState: VimState = {
     typeSubscription: undefined,
@@ -87,6 +88,14 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.commands.registerCommand(
             'extension.simpleVim.scrollUpPage',
             scrollCommands.scrollUpPage,
+        ),
+        vscode.commands.registerCommand(
+            'extension.simpleVim.indentLeft',
+            () => indentLeft(globalVimState),
+        ),
+        vscode.commands.registerCommand(
+            'extension.simpleVim.indentRight',
+            () => indentRight(globalVimState),
         ),
     );
 

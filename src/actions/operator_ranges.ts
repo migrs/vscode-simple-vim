@@ -259,13 +259,32 @@ export const operatorRanges: OperatorRange[] = [
         }
     }),
 
-    // TODO: return undefined?
     createOperatorRangeExactKeys(['i', 'i'], true, (vimState, document, position) => {
         const simpleRange = indentLevelRange(document, position.line);
 
         return new vscode.Range(
             new vscode.Position(simpleRange.start, 0),
             new vscode.Position(simpleRange.end, document.lineAt(simpleRange.end).text.length),
+        );
+    }),
+
+    // Indent left
+    createOperatorRangeExactKeys(['<', '<'], true, (vimState, document, position) => {
+        const startLine = position.line;
+        const endLine = position.line;
+        return new vscode.Range(
+            new vscode.Position(startLine, 0),
+            new vscode.Position(endLine, document.lineAt(endLine).text.length)
+        );
+    }),
+
+    // Indent right
+    createOperatorRangeExactKeys(['>', '>'], true, (vimState, document, position) => {
+        const startLine = position.line;
+        const endLine = position.line;
+        return new vscode.Range(
+            new vscode.Position(startLine, 0),
+            new vscode.Position(endLine, document.lineAt(endLine).text.length)
         );
     }),
 ];

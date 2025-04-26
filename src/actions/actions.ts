@@ -11,6 +11,7 @@ import { setVisualLineSelections } from '../visual_line_utils';
 import { flashYankHighlight } from '../yank_highlight';
 import { putAfter } from '../put_utils/put_after';
 import { putBefore } from '../put_utils/put_before';
+import { indentLeft, indentRight } from './indent_actions';
 
 export const actions: Action[] = [
     parseKeysExact(['i'], [Mode.Normal, Mode.Visual, Mode.VisualLine], (vimState, editor) => {
@@ -262,6 +263,9 @@ export const actions: Action[] = [
     parseKeysExact([','], [Mode.Normal], (vimState, editor) => {
         vimState.commaAction(vimState, editor);
     }),
+
+    parseKeysExact(['<', '<'], [Mode.Normal, Mode.Visual, Mode.VisualLine], indentLeft),
+    parseKeysExact(['>', '>'], [Mode.Normal, Mode.Visual, Mode.VisualLine], indentRight),
 ];
 
 function deleteLine(vimState: VimState, editor: vscode.TextEditor): void {
