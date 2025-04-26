@@ -119,6 +119,28 @@ export const operatorRanges: OperatorRange[] = [
         }
     }),
 
+    createOperatorRangeRegex(/^d(.)$/, /^d$/, false, (vimState, document, position, match) => {
+        const lineText = document.lineAt(position.line).text;
+        const result = lineText.indexOf(match[1], position.character + 1);
+
+        if (result >= 0) {
+            return new vscode.Range(position, position.with({ character: result }));
+        } else {
+            return undefined;
+        }
+    }),
+
+    createOperatorRangeRegex(/^f(.)$/, /^f$/, false, (vimState, document, position, match) => {
+        const lineText = document.lineAt(position.line).text;
+        const result = lineText.indexOf(match[1], position.character + 1);
+
+        if (result >= 0) {
+            return new vscode.Range(position, position.with({ character: result + 1 }));
+        } else {
+            return undefined;
+        }
+    }),
+
     createOperatorRangeExactKeys(['g', 'g'], true, (vimState, document, position) => {
         const lineLength = document.lineAt(position.line).text.length;
 
