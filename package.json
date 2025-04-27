@@ -21,9 +21,20 @@
     ],
     "main": "./out/extension",
     "contributes": {
+        "commands": [
+            {
+                "command": "extension.simpleVim.joinLines",
+                "title": "Join Lines"
+            }
+        ],
         "keybindings": [
             {
                 "key": "Escape",
+                "command": "extension.simpleVim.escapeKey",
+                "when": "editorTextFocus"
+            },
+            {
+                "key": "ctrl+[",
                 "command": "extension.simpleVim.escapeKey",
                 "when": "editorTextFocus"
             },
@@ -50,6 +61,11 @@
             {
                 "key": "ctrl+b",
                 "command": "extension.simpleVim.scrollUpPage",
+                "when": "editorTextFocus && !extension.simpleVim.insertMode"
+            },
+            {
+                "key": "shift+j",
+                "command": "extension.simpleVim.joinLines",
                 "when": "editorTextFocus && !extension.simpleVim.insertMode"
             }
         ],
