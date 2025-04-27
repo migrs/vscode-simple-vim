@@ -231,8 +231,24 @@ export const actions: Action[] = [
         setModeCursorStyle(vimState.mode, editor);
     }),
 
-    parseKeysExact(['x'], [Mode.Normal], (vimState, editor) => {
-        vscode.commands.executeCommand('deleteRight');
+    parseKeysExact(['x'], [Mode.Normal, Mode.Visual, Mode.VisualLine], (vimState, editor) => {
+        if (vimState.mode === Mode.Normal) {
+            vscode.commands.executeCommand('deleteRight');
+        } else {
+            // In visual mode, delete the selected text
+            editor.edit(editBuilder => {
+                editor.selections.forEach(selection => {
+                    editBuilder.delete(selection);
+                });
+            }).then(() => {
+                // Move cursor to start of deleted text
+                editor.selections = editor.selections.map(selection => {
+                    return new vscode.Selection(selection.start, selection.start);
+                });
+                enterNormalMode(vimState);
+                setModeCursorStyle(vimState.mode, editor);
+            });
+        }
     }),
 
     parseKeysExact(['z', 't'], [Mode.Normal], (vimState, editor) => {
@@ -328,4 +344,8 @@ function yankToEndOfLine(vimState: VimState, editor: vscode.TextEditor): void {
         }),
         linewise: false,
     };
+}
+
+function enterNormalMode(vimState: VimState) {
+    vimState.mode = Mode.Normal;
 }
