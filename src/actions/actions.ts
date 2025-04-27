@@ -292,6 +292,10 @@ export const actions: Action[] = [
             removeTypeSubscription(vimState);
         });
     }),
+
+    parseKeysExact(['J'], [Mode.Normal], (vimState, editor) => {
+        vscode.commands.executeCommand('extension.simpleVim.joinLines');
+    }),
 ];
 
 function deleteLine(vimState: VimState, editor: vscode.TextEditor): void {

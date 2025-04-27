@@ -8,6 +8,7 @@ import { addTypeSubscription, removeTypeSubscription } from './type_subscription
 import { VimState } from './vim_state_types';
 import { escapeHandler } from './escape_handler';
 import { indentLeft, indentRight } from './actions/indent_actions';
+import { joinLines } from './actions/join_lines';
 
 const globalVimState: VimState = {
     typeSubscription: undefined,
@@ -96,6 +97,10 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.commands.registerCommand(
             'extension.simpleVim.indentRight',
             () => indentRight(globalVimState),
+        ),
+        vscode.commands.registerCommand(
+            'extension.simpleVim.joinLines',
+            joinLines,
         ),
     );
 
