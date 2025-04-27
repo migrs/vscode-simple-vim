@@ -41,7 +41,7 @@
             {
                 "key": "ctrl+g",
                 "command": "extension.simpleVim.escapeKey",
-                "when": "editorTextFocus"
+                "when": "editorTextFocus && !inQuickOpen"
             },
             {
                 "key": "ctrl+r",
