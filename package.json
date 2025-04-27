@@ -39,6 +39,11 @@
                 "when": "editorTextFocus"
             },
             {
+                "key": "ctrl+g",
+                "command": "extension.simpleVim.escapeKey",
+                "when": "editorTextFocus"
+            },
+            {
                 "key": "ctrl+r",
                 "command": "redo",
                 "when": "editorTextFocus && !extension.simpleVim.insertMode"
