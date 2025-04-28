@@ -143,6 +143,20 @@ export const actions: Action[] = [
     }),
 
     parseKeysExact(['D'], [Mode.Normal], (vimState, editor) => {
+        // First yank to end of line
+        yankToEndOfLine(vimState, editor);
+        
+        // Yank highlight
+        const highlightRanges = editor.selections.map(selection => {
+            const lineLength = editor.document.lineAt(selection.active.line).text.length;
+            return new vscode.Range(
+                selection.active,
+                selection.active.with({ character: lineLength }),
+            );
+        });
+        flashYankHighlight(editor, highlightRanges);
+        
+        // Then delete to end of line
         vscode.commands.executeCommand('deleteAllRight');
     }),
 
