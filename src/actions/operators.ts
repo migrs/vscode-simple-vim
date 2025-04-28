@@ -15,7 +15,7 @@ export const operators: Action[] = [
 
         cursorsToRangesStart(editor, ranges);
 
-        delete_(editor, ranges, linewise);
+        delete_(vimState, editor, ranges, linewise);
 
         if (vimState.mode === Mode.Visual || vimState.mode === Mode.VisualLine) {
             enterNormalMode(vimState);
@@ -69,7 +69,7 @@ export const operators: Action[] = [
         cursorsToRangesStart(editor, ranges);
 
         yank(vimState, editor, ranges, linewise);
-        delete_(editor, ranges, linewise);
+        delete_(vimState, editor, ranges, linewise);
 
         if (vimState.mode === Mode.Visual || vimState.mode === Mode.VisualLine) {
             enterNormalMode(vimState);
@@ -118,7 +118,10 @@ function cursorsToRangesStart(editor: vscode.TextEditor, ranges: readonly (vscod
     });
 }
 
-function delete_(editor: vscode.TextEditor, ranges: readonly (vscode.Range | undefined)[], linewise: boolean) {
+function delete_(vimState: VimState, editor: vscode.TextEditor, ranges: readonly (vscode.Range | undefined)[], linewise: boolean) {
+    // Yank the text first
+    yank(vimState, editor, ranges, linewise);
+
     editor.edit(editBuilder => {
         ranges.forEach(range => {
             if (!range) return;

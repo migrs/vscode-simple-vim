@@ -15,7 +15,7 @@ Operators act on a range of text. In Normal mode the range is specified by the O
 | `c` | Delete range and enter insert mode. |
 | `y` | Yank range. |
 | `r` | Yank and delete range. |
-| `s` | Select range and enter Visual mode. |
+| `s` | Delete character under cursor and enter Insert mode. |
 
 
 ## OperatorRanges
@@ -116,7 +116,7 @@ Actions are miscellaneous commands that don't follow the well-defined patterns o
 | `R` | Yank to the end of the line and delete it. |
 | `ss` | Select current line. |
 | `S` | Select to the end of the line. |
-| `x` | Delete character. |
+| `x` | Delete character under cursor in Normal mode, or delete selected text in Visual mode. |
 | `zt` | Scroll so that cursor is at the top of the screen. |
 | `zz` | Scroll so that cursor is in the middle of the screen. |
 | `zb` | Scroll so that cursor is at the bottom of the screen. |
@@ -126,6 +126,7 @@ Actions are miscellaneous commands that don't follow the well-defined patterns o
 | `Ctrl+b` | Scroll up full page. |
 | `;` | Repeat the last `f`, `F`, `t` or `T` motion forward. |
 | `,` | Repeat the last `f`, `F`, `t` or `T` motion backward. |
+| `J` | Join lines. |
 
 
 ## Differences From Vim
